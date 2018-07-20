@@ -1,0 +1,15 @@
+[Unit]
+Description=Automated manager and downloader for Music
+
+[Service]
+ExecStart=/usr/bin/mono --debug /usr/share/radarr/Lidarr.exe -nobrowser -data /var/lib/lidarr
+User=lidarr
+Group=lidarr
+Restart=on-failure
+RestartSec=5
+
+[Unit]
+After=network.target
+
+[Install]
+WantedBy=multi-user.target

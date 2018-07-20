@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>lidarr</short>
+  <description>Lidarr Download Service</description>
+  <port protocol="tcp" port="8686"/>
+</service>
