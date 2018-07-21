@@ -15,15 +15,13 @@ Source2:        https://raw.githubusercontent.com/lidarr/Lidarr/develop/README.m
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
+BuildRequires:  firewalld-filesystem
 BuildRequires:  systemd
 BuildRequires:  tar
 
-# Required for the firewall rules
-# http://fedoraproject.org/wiki/PackagingDrafts/ScriptletSnippets/Firewalld
 Requires:       firewalld-filesystem
 Requires(post): firewalld-filesystem
-
-Requires:       mono
+Requires:       mono-core
 Requires:       libmediainfo
 Requires:       sqlite
 
