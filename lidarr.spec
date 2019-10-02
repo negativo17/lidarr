@@ -2,7 +2,7 @@
 %global group %{name}
 
 Name:           lidarr
-Version:        0.6.2.883
+Version:        0.7.1.1381
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -77,6 +77,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Wed Oct 02 2019 Simone Caronni <negativo17@gmail.com> - 0.7.1.1381-1
+- Update to 0.7.1.1381.
+
 * Mon May 27 2019 Simone Caronni <negativo17@gmail.com> - 0.6.2.883-1
 - Update to 0.6.2.883.
 
