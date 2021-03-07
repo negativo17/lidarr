@@ -2,7 +2,7 @@
 Description=Automated manager and downloader for Music
 
 [Service]
-ExecStart=/usr/bin/mono --debug /usr/share/lidarr/Lidarr.exe -nobrowser -data /var/lib/lidarr
+ExecStart=/usr/lib64/lidarr/Lidarr -nobrowser -data /var/lib/lidarr
 User=lidarr
 Group=lidarr
 Restart=on-failure
