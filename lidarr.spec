@@ -1,5 +1,21 @@
+%global debug_package %{nil}
+
 %global user %{name}
 %global group %{name}
+
+%global dotnet 3.1
+
+%ifarch x86_64
+%global rid x64
+%endif
+
+%ifarch aarch64
+%global rid arm64
+%endif
+
+%ifarch armv7hl
+%global rid arm
+%endif
 
 Name:           lidarr
 Version:        0.8.1.2135
@@ -8,20 +24,24 @@ Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
 
-Source0:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.master.%{version}.linux-core-x64.tar.gz
-Source1:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.master.%{version}.linux-core-arm64.tar.gz
-Source2:        https://raw.githubusercontent.com/lidarr/Lidarr/develop/LICENSE.md
-Source3:        https://raw.githubusercontent.com/lidarr/Lidarr/develop/README.md
+BuildArch:      x86_64 aarch64 armv7hl
+
+Source0:        https://github.com/%{name}/Lidarr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
+BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  systemd
 BuildRequires:  tar
+BuildRequires:  yarn
 
+Requires:       aspnetcore-runtime-%{dotnet}
+Requires:       dotnet-runtime-%{dotnet}
 Requires:       firewalld-filesystem
 Requires(post): firewalld-filesystem
-Requires:       mono-core
 Requires:       libmediainfo
 Requires:       sqlite
 Requires(pre):  shadow-utils
@@ -39,30 +59,43 @@ be configured to automatically upgrade the quality of files already downloaded
 when a better quality format becomes available.
 
 %prep
-%ifarch x86_64
-%setup -q -n Lidarr
-%endif
+%autosetup -n Lidarr-%{version}
 
-%ifarch aarch64
-%setup -q -T -b 1 -n Lidarr
-%endif
+sed -i \
+    -e 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>%{version}<\/AssemblyVersion>/g' \
+    -e 's/<AssemblyConfiguration>.*<\/AssemblyConfiguration>/<AssemblyConfiguration>master<\/AssemblyConfiguration>/g' \
+    src/Directory.Build.props
 
-cp %{SOURCE2} %{SOURCE3} .
+%build
+export DOTNET_CLI_TELEMETRY_OPTOUT=1
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+dotnet publish \
+    --configuration Release \
+    --framework netcoreapp%{dotnet} \
+    --runtime linux-%{rid} \
+    --self-contained false \
+    src/Lidarr.sln
+
+yarn install --frozen-lockfile
+yarn run build --production
 
 %install
-mkdir -p %{buildroot}%{_libdir}/%{name}
-mkdir -p %{buildroot}%{_prefix}/lib/firewalld/services/
+mkdir -p %{buildroot}%{_libdir}
+mkdir -p %{buildroot}%{_prefix}/lib/firewalld/services
 mkdir -p %{buildroot}%{_unitdir}
 mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
 
-cp -fr * %{buildroot}%{_libdir}/%{name}
+cp -a _output/netcoreapp%{dotnet}/linux-%{rid}/publish %{buildroot}%{_libdir}/%{name}
+cp -a _output/Lidarr.Update/netcoreapp%{dotnet}/linux-%{rid}/publish %{buildroot}%{_libdir}/%{name}/Lidarr.Update
+cp -a _output/UI %{buildroot}%{_libdir}/%{name}/UI
 
 install -m 0644 -p %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
 install -m 0644 -p %{SOURCE11} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
 
-find %{buildroot} -name "*.mdb" -delete
-find %{buildroot} \( -name "*.js" -o -name "*.map" -o -name "*.config" \
-    -o -name "*.css" -o -name "*.svg" -o -name "*.html" \) -exec chmod 644 {} \;
+find %{buildroot} -name "*.pdb" -delete
+find %{buildroot} -name "ServiceUninstall*" -delete
+find %{buildroot} -name "ServiceInstall*" -delete
+find %{buildroot} -name "Lidarr.Windows*" -delete
 
 %pre
 getent group %{group} >/dev/null || groupadd -r %{group}
@@ -93,6 +126,8 @@ exit 0
 * Mon Apr 19 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-1
 - Update to 0.8.1.2135.
 - Add SELinux requirements.
+- Build framework dependent binary from source instead of using self contained
+  binaries (66% size reduction).
 
 * Sun Mar 07 2021 Simone Caronni <negativo17@gmail.com> - 0.8.0.2042-2
 - Switch to Net core build and move installation to libdir.
