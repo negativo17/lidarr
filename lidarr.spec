@@ -2,14 +2,14 @@
 %global group %{name}
 
 Name:           lidarr
-Version:        0.8.0.2042
-Release:        2%{?dist}
+Version:        0.8.1.2135
+Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
 
-Source0:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.develop.%{version}.linux-core-x64.tar.gz
-Source1:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.develop.%{version}.linux-core-arm64.tar.gz
+Source0:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.master.%{version}.linux-core-x64.tar.gz
+Source1:        https://github.com/%{name}/Lidarr/releases/download/v%{version}/Lidarr.master.%{version}.linux-core-arm64.tar.gz
 Source2:        https://raw.githubusercontent.com/lidarr/Lidarr/develop/LICENSE.md
 Source3:        https://raw.githubusercontent.com/lidarr/Lidarr/develop/README.md
 Source10:       %{name}.service
@@ -25,6 +25,10 @@ Requires:       mono-core
 Requires:       libmediainfo
 Requires:       sqlite
 Requires(pre):  shadow-utils
+
+%if 0%{?rhel} >= 8 || 0%{?fedora}
+Requires:       (%{name}-selinux if selinux-policy)
+%endif
 
 Obsoletes:      %{name} < %{version}-%{release}
 
@@ -86,6 +90,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Mon Apr 19 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-1
+- Update to 0.8.1.2135.
+- Add SELinux requirements.
+
 * Sun Mar 07 2021 Simone Caronni <negativo17@gmail.com> - 0.8.0.2042-2
 - Switch to Net core build and move installation to libdir.
 
