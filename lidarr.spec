@@ -19,7 +19,7 @@
 
 Name:           lidarr
 Version:        0.8.1.2135
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -38,8 +38,6 @@ BuildRequires:  systemd
 BuildRequires:  tar
 BuildRequires:  yarn
 
-Requires:       aspnetcore-runtime-%{dotnet}
-Requires:       dotnet-runtime-%{dotnet}
 Requires:       firewalld-filesystem
 Requires(post): firewalld-filesystem
 Requires:       libmediainfo
@@ -73,7 +71,6 @@ dotnet publish \
     --configuration Release \
     --framework netcoreapp%{dotnet} \
     --runtime linux-%{rid} \
-    --self-contained false \
     src/Lidarr.sln
 
 yarn install --frozen-lockfile
@@ -123,6 +120,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Wed Apr 21 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-2
+- Revert the last change as the runtime is tied to the minor release.
+
 * Mon Apr 19 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-1
 - Update to 0.8.1.2135.
 - Add SELinux requirements.
