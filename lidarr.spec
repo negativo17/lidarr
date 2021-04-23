@@ -1,4 +1,5 @@
 %global debug_package %{nil}
+%define _build_id_links none
 
 %global user %{name}
 %global group %{name}
@@ -19,7 +20,7 @@
 
 Name:           lidarr
 Version:        0.8.1.2135
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -120,6 +121,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Fri Apr 23 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-3
+- Do not create build-id links if no debug package is generated.
+
 * Wed Apr 21 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-2
 - Revert the last change as the runtime is tied to the minor release.
 
