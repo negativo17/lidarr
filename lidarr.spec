@@ -75,7 +75,7 @@ dotnet publish \
     src/Lidarr.sln
 
 yarn install --frozen-lockfile
-yarn run build --production
+yarn run build --mode production
 
 %install
 mkdir -p %{buildroot}%{_libdir}
