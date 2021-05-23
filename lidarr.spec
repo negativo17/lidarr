@@ -37,7 +37,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  systemd
 BuildRequires:  tar
-BuildRequires:  yarn
+BuildRequires:  yarnpkg
 
 Requires:       firewalld-filesystem
 Requires(post): firewalld-filesystem
@@ -75,7 +75,7 @@ dotnet publish \
     src/Lidarr.sln
 
 yarn install --frozen-lockfile
-yarn run build --production
+yarn run build --mode production
 
 %install
 mkdir -p %{buildroot}%{_libdir}
