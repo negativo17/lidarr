@@ -20,7 +20,7 @@
 
 Name:           lidarr
 Version:        0.8.1.2135
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -35,6 +35,7 @@ BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  nodejs
 BuildRequires:  systemd
 BuildRequires:  tar
 BuildRequires:  yarnpkg
@@ -121,6 +122,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Wed Sep 22 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-4
+- Add nodejs explicit depdendency.
+
 * Fri Apr 23 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-3
 - Do not create build-id links if no debug package is generated.
 
