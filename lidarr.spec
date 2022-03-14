@@ -20,7 +20,7 @@
 
 Name:           lidarr
 Version:        0.8.1.2135
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -61,21 +61,44 @@ when a better quality format becomes available.
 %prep
 %autosetup -n Lidarr-%{version}
 
-sed -i \
-    -e 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>%{version}<\/AssemblyVersion>/g' \
-    -e 's/<AssemblyConfiguration>.*<\/AssemblyConfiguration>/<AssemblyConfiguration>master<\/AssemblyConfiguration>/g' \
-    src/Directory.Build.props
+# Remove test coverage and Windows specific stuff from project file
+pushd src
+dotnet sln Lidarr.sln remove \
+  NzbDrone.Api.Test \
+  NzbDrone.Automation.Test \
+  NzbDrone.Common.Test \
+  NzbDrone.Core.Test \
+  NzbDrone.Host.Test \
+  NzbDrone.Integration.Test \
+  NzbDrone.Libraries.Test \
+  NzbDrone.Mono.Test \
+  NzbDrone.Test.Common \
+  NzbDrone.Test.Dummy \
+  NzbDrone.Update.Test \
+  NzbDrone.Windows.Test \
+  NzbDrone.Windows \
+  ServiceHelpers/ServiceInstall \
+  ServiceHelpers/ServiceUninstall
+popd
+
+#sed -i \
+#    -e 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>%{version}<\/AssemblyVersion>/g' \
+#    -e 's/<AssemblyConfiguration>.*<\/AssemblyConfiguration>/<AssemblyConfiguration>master<\/AssemblyConfiguration>/g' \
+#    src/Directory.Build.props
 
 %build
+pushd src
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 dotnet publish \
     --configuration Release \
     --framework netcoreapp%{dotnet} \
     --runtime linux-%{rid} \
-    src/Lidarr.sln
+    Lidarr.sln
+popd
 
-yarn install --frozen-lockfile
+# Use a huge timeout for aarch64 builds
+yarn install --frozen-lockfile --network-timeout 1000000
 yarn run build --mode production
 
 %install
@@ -92,9 +115,6 @@ install -m 0644 -p %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
 install -m 0644 -p %{SOURCE11} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
 
 find %{buildroot} -name "*.pdb" -delete
-find %{buildroot} -name "ServiceUninstall*" -delete
-find %{buildroot} -name "ServiceInstall*" -delete
-find %{buildroot} -name "Lidarr.Windows*" -delete
 
 %pre
 getent group %{group} >/dev/null || groupadd -r %{group}
@@ -122,6 +142,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Mon Mar 14 2022 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-5
+- Merge in changes from Radarr.
+
 * Wed Sep 22 2021 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-4
 - Add nodejs explicit depdendency.
 
