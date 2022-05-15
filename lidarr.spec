@@ -4,7 +4,7 @@
 %global user %{name}
 %global group %{name}
 
-%global dotnet 3.1
+%global dotnet 6.0
 
 %ifarch x86_64
 %global rid x64
@@ -19,8 +19,8 @@
 %endif
 
 Name:           lidarr
-Version:        0.8.1.2135
-Release:        5%{?dist}
+Version:        1.0.1.2578
+Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -35,7 +35,11 @@ BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 36
+BuildRequires:  nodejs >= 17
+%else
 BuildRequires:  nodejs
+%endif
 BuildRequires:  systemd
 BuildRequires:  tar
 BuildRequires:  yarnpkg
@@ -49,8 +53,6 @@ Requires(pre):  shadow-utils
 %if 0%{?rhel} >= 8 || 0%{?fedora}
 Requires:       (%{name}-selinux if selinux-policy)
 %endif
-
-Obsoletes:      %{name} < %{version}-%{release}
 
 %description
 Lidarr is a Music recored for Usenet and BitTorrent users. It can monitor
@@ -81,38 +83,35 @@ dotnet sln Lidarr.sln remove \
   ServiceHelpers/ServiceUninstall
 popd
 
-#sed -i \
-#    -e 's/<AssemblyVersion>.*<\/AssemblyVersion>/<AssemblyVersion>%{version}<\/AssemblyVersion>/g' \
-#    -e 's/<AssemblyConfiguration>.*<\/AssemblyConfiguration>/<AssemblyConfiguration>master<\/AssemblyConfiguration>/g' \
-#    src/Directory.Build.props
-
 %build
 pushd src
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 dotnet publish \
     --configuration Release \
-    --framework netcoreapp%{dotnet} \
+    --framework net%{dotnet} \
+    --output _output \
     --runtime linux-%{rid} \
+    --self-contained \
+    --verbosity normal \
     Lidarr.sln
 popd
 
 # Use a huge timeout for aarch64 builds
 yarn install --frozen-lockfile --network-timeout 1000000
+%if 0%{?rhel} >= 9 || 0%{?fedora} >= 36
+export NODE_OPTIONS=--openssl-legacy-provider
+%endif
 yarn run build --mode production
 
 %install
-mkdir -p %{buildroot}%{_libdir}
-mkdir -p %{buildroot}%{_prefix}/lib/firewalld/services
-mkdir -p %{buildroot}%{_unitdir}
+mkdir -p %{buildroot}%{_libdir}/%{name}
 mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
 
-cp -a _output/netcoreapp%{dotnet}/linux-%{rid}/publish %{buildroot}%{_libdir}/%{name}
-cp -a _output/Lidarr.Update/netcoreapp%{dotnet}/linux-%{rid}/publish %{buildroot}%{_libdir}/%{name}/Lidarr.Update
-cp -a _output/UI %{buildroot}%{_libdir}/%{name}/UI
+cp -a src/_output/* _output/UI %{buildroot}%{_libdir}/%{name}/
 
-install -m 0644 -p %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
-install -m 0644 -p %{SOURCE11} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
+install -D -m 0644 -p %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
+install -D -m 0644 -p %{SOURCE11} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
 
 find %{buildroot} -name "*.pdb" -delete
 
@@ -142,6 +141,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Sun May 15 2022 Simone Caronni <negativo17@gmail.com> - 1.0.1.2578-1
+- Update to 1.0.1.2578.
+- Fix build on OpenSSL 3.0 distributions.
+
 * Mon Mar 14 2022 Simone Caronni <negativo17@gmail.com> - 0.8.1.2135-5
 - Merge in changes from Radarr.
 
