@@ -18,8 +18,12 @@
 %global rid arm
 %endif
 
+%if 0%{?fedora} >= 36
+%global __requires_exclude ^liblttng-ust\\.so\\.0.*$
+%endif
+
 Name:           lidarr
-Version:        1.0.1.2578
+Version:        1.0.2.2592
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -141,6 +145,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Thu Jun 16 2022 Simone Caronni <negativo17@gmail.com> - 1.0.2.2592-1
+- Update to 1.0.2.2592.
+- Fix issues with LTTng Userspace Tracer library 2.13+.
+
 * Sun May 15 2022 Simone Caronni <negativo17@gmail.com> - 1.0.1.2578-1
 - Update to 1.0.1.2578.
 - Fix build on OpenSSL 3.0 distributions.
