@@ -23,7 +23,7 @@
 %endif
 
 Name:           lidarr
-Version:        1.0.2.2592
+Version:        1.1.0.2649
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -145,6 +145,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Tue Aug 16 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-1
+- Update to 1.1.0.2649.
+
 * Thu Jun 16 2022 Simone Caronni <negativo17@gmail.com> - 1.0.2.2592-1
 - Update to 1.0.2.2592.
 - Fix issues with LTTng Userspace Tracer library 2.13+.
