@@ -24,7 +24,7 @@
 
 Name:           lidarr
 Version:        1.1.0.2649
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -39,11 +39,7 @@ BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-%if 0%{?rhel} >= 8 || 0%{?fedora} >= 36
-BuildRequires:  nodejs >= 17
-%else
 BuildRequires:  nodejs
-%endif
 BuildRequires:  systemd
 BuildRequires:  tar
 BuildRequires:  yarnpkg
@@ -103,9 +99,6 @@ popd
 
 # Use a huge timeout for aarch64 builds
 yarn install --frozen-lockfile --network-timeout 1000000
-%if 0%{?rhel} >= 9 || 0%{?fedora} >= 36
-export NODE_OPTIONS=--openssl-legacy-provider
-%endif
 yarn run build --mode production
 
 %install
@@ -145,6 +138,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Wed Oct 26 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-2
+- Drop OpenSSL workaround.
+
 * Tue Aug 16 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-1
 - Update to 1.1.0.2649.
 
