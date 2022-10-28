@@ -1,3 +1,6 @@
+# mock configuration:
+# - Requires network for running yarn/dotnet build
+
 %global debug_package %{nil}
 %define _build_id_links none
 
@@ -24,7 +27,7 @@
 
 Name:           lidarr
 Version:        1.1.0.2649
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -138,6 +141,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Fri Oct 28 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-3
+- Add note about mock configuration.
+- Trim changelog.
+
 * Wed Oct 26 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-2
 - Drop OpenSSL workaround.
 
@@ -175,27 +182,3 @@ exit 0
 
 * Tue Feb 02 2021 Simone Caronni <negativo17@gmail.com> - 0.8.0.2042-1
 - Update to 0.8.0.2042.
-
-* Thu Nov 05 2020 Simone Caronni <negativo17@gmail.com> - 0.7.2.1878-1
-- Update to 0.7.2.1878.
-
-* Wed Oct 02 2019 Simone Caronni <negativo17@gmail.com> - 0.7.1.1381-1
-- Update to 0.7.1.1381.
-
-* Mon May 27 2019 Simone Caronni <negativo17@gmail.com> - 0.6.2.883-1
-- Update to 0.6.2.883.
-
-* Tue Apr 30 2019 Simone Caronni <negativo17@gmail.com> - 0.6.1.830-1
-- Update to 0.6.1.830.
-
-* Sun Dec 09 2018 Simone Caronni <negativo17@gmail.com> - 0.5.0.583-1
-- Update to 0.5.0.583.
-
-* Thu Sep 27 2018 Simone Caronni <negativo17@gmail.com> - 0.4.0.524-1
-- Update to 0.4.0.524.
-
-* Tue Jul 24 2018 Simone Caronni <negativo17@gmail.com> - 0.3.1.471-1
-- Update to 0.3.1.471.
-
-* Fri Jul 20 2018 Simone Caronni <negativo17@gmail.com> - 0.3.0.430-1
-- First build.
