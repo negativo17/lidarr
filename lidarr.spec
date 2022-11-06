@@ -26,8 +26,8 @@
 %endif
 
 Name:           lidarr
-Version:        1.1.0.2649
-Release:        3%{?dist}
+Version:        1.1.1.2762
+Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -141,6 +141,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Sun Nov 06 2022 Simone Caronni <negativo17@gmail.com> - 1.1.1.2762-1
+- Update to 1.1.1.2762.
+
 * Fri Oct 28 2022 Simone Caronni <negativo17@gmail.com> - 1.1.0.2649-3
 - Add note about mock configuration.
 - Trim changelog.
