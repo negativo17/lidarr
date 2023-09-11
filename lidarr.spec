@@ -26,7 +26,7 @@
 %endif
 
 Name:           lidarr
-Version:        1.4.1.3566
+Version:        1.4.2.3576
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -87,18 +87,12 @@ dotnet sln Lidarr.sln remove \
 popd
 
 %build
-pushd src
 export DOTNET_CLI_TELEMETRY_OPTOUT=1
-export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
-dotnet publish \
-    --configuration Release \
-    --framework net%{dotnet} \
-    --output _output \
-    --runtime linux-%{rid} \
-    --self-contained \
-    --verbosity normal \
-    Lidarr.sln
-popd
+dotnet msbuild -restore src/Lidarr.sln \
+    -p:RuntimeIdentifiers=linux-%{rid} \
+    -p:Configuration=Release \
+    -p:Platform=Posix \
+    -v:normal
 
 # Use a huge timeout for aarch64 builds
 yarn install --frozen-lockfile --network-timeout 1000000
@@ -108,7 +102,7 @@ yarn run build --mode production
 mkdir -p %{buildroot}%{_libdir}/%{name}
 mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
 
-cp -a src/_output/* _output/UI %{buildroot}%{_libdir}/%{name}/
+cp -a _output/net%{dotnet}/* _output/UI %{buildroot}%{_libdir}/%{name}/
 
 install -D -m 0644 -p %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 0644 -p %{SOURCE11} %{buildroot}%{_prefix}/lib/firewalld/services/%{name}.xml
@@ -141,6 +135,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Mon Sep 11 2023 Simone Caronni <negativo17@gmail.com> - 1.4.2.3576-1
+- Update to 1.4.2.3576.
+- Change build to more closely match upstream.
+
 * Mon Sep 04 2023 Simone Caronni <negativo17@gmail.com> - 1.4.1.3566-1
 - Update to 1.4.1.3566.
 
