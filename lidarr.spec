@@ -26,7 +26,7 @@
 %endif
 
 Name:           lidarr
-Version:        2.1.7.4030
+Version:        2.2.0.4045
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -135,6 +135,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Tue Feb 20 2024 Simone Caronni <negativo17@gmail.com> - 2.2.0.4045-1
+- Update to 2.2.0.4045.
+
 * Mon Feb 12 2024 Simone Caronni <negativo17@gmail.com> - 2.1.7.4030-1
 - Update to 2.1.7.4030.
 
