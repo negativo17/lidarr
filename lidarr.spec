@@ -35,6 +35,7 @@ URL:            https://radarr.video/
 BuildArch:      x86_64 aarch64 armv7hl
 
 Source0:        https://github.com/%{name}/Lidarr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Patch0:         https://github.com/Lidarr/Lidarr/commit/70e524409c7a7e825f024b097e5235f047264bd7.patch
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
@@ -52,10 +53,7 @@ Requires(post): firewalld-filesystem
 Requires:       libmediainfo
 Requires:       sqlite
 Requires(pre):  shadow-utils
-
-%if 0%{?rhel} >= 8 || 0%{?fedora}
-Requires:       (%{name}-selinux if selinux-policy)
-%endif
+Requires:       %{name}-selinux
 
 %description
 Lidarr is a Music recored for Usenet and BitTorrent users. It can monitor
@@ -64,7 +62,7 @@ be configured to automatically upgrade the quality of files already downloaded
 when a better quality format becomes available.
 
 %prep
-%autosetup -n Lidarr-%{version}
+%autosetup -p1 -n Lidarr-%{version}
 
 # Remove test coverage and Windows specific stuff from project file
 pushd src
@@ -137,6 +135,8 @@ exit 0
 %changelog
 * Sun Aug 04 2024 Simone Caronni <negativo17@gmail.com> - 2.5.0.4277-1
 - Update to 2.5.0.4277.
+- Backport patch for https://github.com/advisories/GHSA-63p8-c4ww-9cg7.
+- Clean up SPEC file.
 
 * Wed Jul 10 2024 Simone Caronni <negativo17@gmail.com> - 2.4.2.4238-1
 - Update to 2.4.2.4238.
