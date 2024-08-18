@@ -26,7 +26,7 @@
 %endif
 
 Name:           lidarr
-Version:        2.5.0.4277
+Version:        2.5.1.4311
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -133,6 +133,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Sun Aug 18 2024 Simone Caronni <negativo17@gmail.com> - 2.5.1.4311-1
+- Update to 2.5.1.4311.
+
 * Sun Aug 04 2024 Simone Caronni <negativo17@gmail.com> - 2.5.0.4277-1
 - Update to 2.5.0.4277.
 - Backport patch for https://github.com/advisories/GHSA-63p8-c4ww-9cg7.
