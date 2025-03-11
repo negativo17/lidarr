@@ -27,7 +27,7 @@
 
 Name:           lidarr
 Version:        2.9.6.4552
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -35,6 +35,7 @@ URL:            https://radarr.video/
 BuildArch:      x86_64 aarch64 armv7hl
 
 Source0:        https://github.com/%{name}/Lidarr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Patch0:         https://github.com/Lidarr/Lidarr/commit/6c6f92fbed4854e7e902aee1c8f0b34e14e99100.patch
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
@@ -133,6 +134,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Tue Mar 11 2025 Simone Caronni <negativo17@gmail.com> - 2.9.6.4552-2
+- Fix for GHSA-65x7-c272-7g7r.
+
 * Tue Feb 04 2025 Simone Caronni <negativo17@gmail.com> - 2.9.6.4552-1
 - Update to 2.9.6.4552.
 
