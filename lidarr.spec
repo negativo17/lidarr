@@ -35,7 +35,6 @@ URL:            https://radarr.video/
 BuildArch:      x86_64 aarch64 armv7hl
 
 Source0:        https://github.com/%{name}/Lidarr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Patch0:         https://github.com/Lidarr/Lidarr/commit/6c6f92fbed4854e7e902aee1c8f0b34e14e99100.patch
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
