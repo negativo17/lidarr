@@ -26,8 +26,8 @@
 %endif
 
 Name:           lidarr
-Version:        2.9.6.4552
-Release:        2%{?dist}
+Version:        2.10.3.4602
+Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -134,6 +134,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Sun Apr 13 2025 Simone Caronni <negativo17@gmail.com> - 2.10.3.4602-1
+- Update to 2.10.3.4602.
+
 * Tue Mar 11 2025 Simone Caronni <negativo17@gmail.com> - 2.9.6.4552-2
 - Fix for GHSA-65x7-c272-7g7r.
 
