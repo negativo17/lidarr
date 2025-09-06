@@ -27,7 +27,7 @@
 
 Name:           lidarr
 Version:        2.13.3.4711
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -96,6 +96,8 @@ dotnet msbuild -restore src/Lidarr.sln \
 yarn install --frozen-lockfile --network-timeout 1000000
 yarn run build --mode production
 
+find . -name libcoreclrtraceptprovider.so -delete
+
 %install
 mkdir -p %{buildroot}%{_libdir}/%{name}
 mkdir -p %{buildroot}%{_sharedstatedir}/%{name}
@@ -133,6 +135,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Sat Sep 06 2025 Simone Caronni <negativo17@gmail.com> - 2.13.3.4711-2
+- Make sure tracerpt is disabled, it requires an old liblttng-ust.
+
 * Thu Sep 04 2025 Simone Caronni <negativo17@gmail.com> - 2.13.3.4711-1
 - Update to 2.13.3.4711.
 
