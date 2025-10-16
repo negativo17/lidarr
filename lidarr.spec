@@ -27,7 +27,7 @@
 
 Name:           lidarr
 Version:        2.13.3.4711
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
 URL:            https://radarr.video/
@@ -135,6 +135,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Thu Oct 16 2025 Simone Caronni <negativo17@gmail.com> - 2.13.3.4711-3
+- Update to 2.14.5.4836.
+
 * Sat Sep 06 2025 Simone Caronni <negativo17@gmail.com> - 2.13.3.4711-2
 - Make sure tracerpt is disabled, it requires an old liblttng-ust.
 
