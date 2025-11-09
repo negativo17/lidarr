@@ -63,6 +63,9 @@ when a better quality format becomes available.
 %prep
 %autosetup -p1 -n Lidarr-%{version}
 
+# Accomodate old SDK versions
+rm -f global.json
+
 # Remove test coverage and Windows specific stuff from project file
 pushd src
 dotnet sln Lidarr.sln remove \
