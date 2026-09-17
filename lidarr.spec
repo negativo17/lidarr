@@ -7,7 +7,7 @@
 %global user %{name}
 %global group %{name}
 
-%global dotnet 8.0
+%global dotnet 10.0
 
 %ifarch x86_64
 %global rid x64
@@ -26,7 +26,7 @@
 %endif
 
 Name:           lidarr
-Version:        3.1.0.4875
+Version:        3.1.6.5078
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -49,6 +49,7 @@ BuildRequires:  yarnpkg
 
 Requires:       firewalld-filesystem
 Requires(post): firewalld-filesystem
+Requires:       libicu
 Requires:       libmediainfo
 Requires:       sqlite
 Requires(pre):  shadow-utils
@@ -138,6 +139,10 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Thu Sep 17 2026 Simone Caronni <negativo17@gmail.com> - 3.1.6.5078-1
+- Update to prerelease 3.1.6.5078.
+- Update to .NET SDK 10.0.
+
 * Thu Nov 20 2025 Simone Caronni <negativo17@gmail.com> - 3.1.0.4875-1
 - Update to 3.1.0.4875.
 
