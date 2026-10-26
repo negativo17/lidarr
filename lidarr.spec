@@ -38,6 +38,8 @@ Source0:        https://github.com/%{name}/Lidarr/archive/refs/tags/v%{version}.
 Source10:       %{name}.service
 Source11:       %{name}.xml
 
+Patch0:         https://github.com/Lidarr/Lidarr/pull/5854.patch
+
 BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
 BuildRequires:  gcc
