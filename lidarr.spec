@@ -26,7 +26,7 @@
 %endif
 
 Name:           lidarr
-Version:        3.1.6.5078
+Version:        3.1.6.5079
 Release:        1%{?dist}
 Summary:        Automated manager and downloader for Music
 License:        GPLv3
@@ -139,6 +139,9 @@ exit 0
 %{_unitdir}/%{name}.service
 
 %changelog
+* Mon Oct 26 2026 Simone Caronni <negativo17@gmail.com> - 3.1.6.5079-1
+- Update to 3.1.6.5079.
+
 * Thu Sep 17 2026 Simone Caronni <negativo17@gmail.com> - 3.1.6.5078-1
 - Update to prerelease 3.1.6.5078.
 - Update to .NET SDK 10.0.
