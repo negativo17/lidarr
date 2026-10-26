@@ -39,6 +39,8 @@ Source1:        %{name}.sysusers.conf
 Source2:        %{name}.service
 Source3:        %{name}.xml
 
+Patch0:         https://github.com/Lidarr/Lidarr/pull/5854.patch
+
 BuildRequires:  dotnet-sdk-%{dotnet}
 BuildRequires:  firewalld-filesystem
 BuildRequires:  gcc
